@@ -1,87 +1,83 @@
-# MCServerManager
+# fastmc
+fastmc — create a Minecraft server in under a minute
 
-A simple but capable bash script for creating, running, and managing Minecraft servers on Linux.
+## Table of Contents
+- [Backstory](#backstory)
+- [Features](#features)
+- [Dependencies](#dependencies)
+- [Build and Install](#build-and-install)
+- [Uninstall](#uninstall)
+- [Directory Structure](#directory-structure)
+
 
 ## Backstory
+
 A friend once bet me an 8GB DDR4 RAM, 20-core Minecraft server if I could set up a LeafMC server in under 5 minutes. I said "no" about ten times. With RAM prices being what they are (or were), the odds of him actually following through seemed close to zero. But eventually, I took the challenge, opened my terminal, fired up a server and got it done (then deleted the server right after).
 
-That experience got me thinking: why not automate this? So I built a bash script to create, backup, delete, and manage Minecraft servers, and decided to make it public for anyone who needs it. Or lands in a situation like me ;)
+That experience got me thinking: why not automate this? So I built a tool to create, backup, delete, and manage Minecraft servers, and decided to make it public for anyone who needs it. Or lands in a situation like me.
+
 
 ## Features
 
-- **Multi-software support**. LeafMC, Paper, Purpur, Spigot, Fabric, and Vanilla
-- **Named servers**. Give each server a name; version and software type are stored in `ServerManager/`
-- **Crash detection & auto-restart**. Servers restart automatically on crash; after 3 crashes in 10 minutes the watcher gives up and logs the event
-- **Crash logs**. All crashes are written to `/opt/mcservers/LOGS/YYYY-MM-DD.log` with timestamps and exit codes
-- **Resource monitor**. Aive CPU % and RAM used vs allocated for a running server
-- **Backup & restore**. Manual backups with configurable retention (default: keep last 5)
-- **Scheduled backups**. Set up automatic backups via cron directly from the menu
-- **RCON integration**. Send commands to running servers without leaving the manager
-- **Multi-server orchestration**. Start all / Stop all from the main menu
-- **tmux-based**. Servers survive terminal disconnects; attach anytime with `tmux attach`
+- Multi-software support for LeafMC, Paper, Purpur, Spigot, Fabric, and Vanilla
+- Named servers where you give each server a name and the version plus software type are saved
+- Crash detection and auto-restart. Servers restart automatically on crash. After 3 crashes in 10 minutes the supervisor gives up and logs what happened
+- Crash logs written to `~/.local/share/fastmc/LOGS/YYYY-MM-DD.log` with timestamps and exit codes
+- Live resource monitor showing CPU percent and RAM used versus allocated
+- Backup and restore with configurable retention (default keeps the last 5)
+- Scheduled backups so you can set up automatic backups via cron right from the menu
+- Native RCON integration to send commands to running servers without leaving the manager
+- Multi-server orchestration to start all or stop all servers from the main menu
+- tmux-based so servers survive terminal disconnects and you can attach anytime
+
 
 ## Dependencies
 
-Install these packages if they're not installed already:
+You need these packages installed:
+
+On Arch:
+```bash
+sudo pacman -S tmux curl openssl
+```
+You also need Java and the Rust toolchain.
+
+## Build and Install
 
 ```bash
-# On Arch
-sudo pacman -S tmux curl openssl tailscale ufw firejail
-paru -S mcrcon
+cargo build --release
+sudo cp target/release/fastmc /usr/bin/fastmc
 ```
 
-Also make sure you have Java:
-
+Run the manager:
 ```bash
-# On Arch
-sudo pacman -S jdk21-openjdk
+fastmc
 ```
 
-Verify:
+## Uninstall
+
+**This will also delete your Minecraft servers and their data**
 ```bash
-java --version
-tmux --version
-mcrcon --version
+sudo rm /usr/bin/fastmc
+rm -rf ~/.local/share/fastmc
 ```
 
-## Installation
-
-1. Create the directory and take ownership:
-```bash
-sudo mkdir -p /opt/mcservers
-sudo chown -R $USER:$USER /opt/mcservers
-```
-
-2. Download the script:
-```bash
-curl -o /opt/mcservers/server.sh https://raw.githubusercontent.com/CallMeAlphabet/MCServerManager/refs/heads/main/server.sh
-chmod +x /opt/mcservers/server.sh
-```
-
-3. Run it:
-```bash
-/opt/mcservers/server.sh
-```
-
-## Directory structure
+## Directory Structure
 
 ```
-/opt/mcservers/
-├── server.sh               ← this script
+~/.local/share/fastmc/
 ├── backups/
-│   └── <server-name>/      ← .tar.gz backups per server
+│   └── <server-name>/     ← .tar.gz backups per server
 ├── LOGS/
-│   └── YYYY-MM-DD.log      ← crash logs
+│   └── YYYY-MM-DD.log     ← crash logs
 └── <server-name>/
     ├── server.jar
     ├── start.sh
     ├── server.properties
     ├── eula.txt
-    ├── .mcserver.conf       ← RCON credentials
-    └── ServerManager/
-        ├── type             ← e.g. "paper"
-        ├── version          ← e.g. "1.21.4"
-        ├── backup_keep      ← retention count
-        ├── watcher.sh       ← auto-generated crash watcher
-        └── stopping         ← flag file for intentional stops
+    ├── .mcserver.conf      ← RCON credentials
+    └── fastmc/
+        ├── type            ← e.g. "paper"
+        ├── version         ← e.g. "1.21.11"
+        ├── backup_keep     ← retention count
+        └── stopping        ← flag file for intentional stops
 ```
