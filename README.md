@@ -14,7 +14,7 @@ fastmc — create a Minecraft server in under a minute
 
 A friend once bet me an 8GB DDR4 RAM, 20-core Minecraft server if I could set up a LeafMC server in under 5 minutes. I said "no" about ten times. With RAM prices being what they are (or were), the odds of him actually following through seemed close to zero. But eventually, I took the challenge, opened my terminal, fired up a server and got it done (then deleted the server right after).
 
-That experience got me thinking: why not automate this? So I built a tool to create, backup, delete, and manage Minecraft servers, and decided to make it public for anyone who needs it. Or lands in a situation like me.
+That experience got me thinking: why not automate this? So I built a tool to create, backup, delete, and manage Minecraft servers, and decided to make it public for anyone who needs it. Or lands in a situation like me. 
 
 
 ## Features
