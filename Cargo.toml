@@ -1,6 +1,8 @@
 [package]
 name = "fastmc"
 version = "0.3.0"
+description = "set up a Minecraft server in under a minute"
+license = "Apache-2.0"
 edition = "2021"
 
 [dependencies]
