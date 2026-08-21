@@ -2,6 +2,7 @@
 name = "fastmc"
 version = "0.3.0"
 description = "set up a Minecraft server in under a minute"
+repository = "https://github.com/CallMeAlphabet/fastmc"
 license = "Apache-2.0"
 edition = "2024"
 
@@ -14,7 +15,7 @@ shellexpand = "3"
 anyhow = "1.0"
 libc = "0.2"
 dirs = "5"
-reqwest = { version = "0.12", features = ["blocking", "json"] }
+reqwest = { version = "0.12", default-features = false, features = ["blocking", "json", "rustls-tls"] }
 serde_json = "1"
 
 [profile.release]
